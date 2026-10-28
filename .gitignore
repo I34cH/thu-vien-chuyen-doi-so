@@ -15,3 +15,11 @@ reports/screenshots/
 # Cấu hình cục bộ của Claude Code / agent (không cần cho nhóm)
 .claude/
 tools/agy/logs/
+
+# Tài liệu quy trình agent (chỉ dùng cục bộ, không cần cho nhóm)
+AGENTS.md
+prompts/
+.agents/
+tools/agy/
+reports/milestones/
+reports/TONG_KET.md

@@ -148,7 +148,6 @@ Các đầu ra phục vụ báo cáo được lưu tại thư mục `reports/`:
 - `reports/tai_lieu/tu_dien_du_lieu.md`: Từ điển dữ liệu trích xuất từ `information_schema`.
 - `reports/tai_lieu/erd.png`: Sơ đồ quan hệ thực thể (ERD).
 - `reports/tai_lieu/api.md`: Tài liệu đặc tả toàn bộ API và phân quyền trích xuất từ Flask.
-- `reports/milestones/M1.md` .. `M6.md` & `reports/TONG_KET.md`: Báo cáo nghiệm thu từng chặng và tổng kết dự án.
 
 ---
 
@@ -156,14 +155,12 @@ Các đầu ra phục vụ báo cáo được lưu tại thư mục `reports/`:
 
 ```text
 CK/
-├── AGENTS.md                  # Hướng dẫn quy tắc & ràng buộc dành cho các agent
 ├── README.md                  # Hướng dẫn cài đặt, vận hành & kịch bản demo 5 phút
 ├── .gitignore                 # Bỏ qua các tệp tạm, cache, logs, uploads cá nhân
 ├── package.json               # Cấu hình kịch bản npm & công cụ Playwright
 ├── playwright.config.js       # Cấu hình Playwright kiểm thử UI (testDir: tests/ui)
 ├── pytest.ini                 # Cấu hình Pytest kiểm thử API (testpaths: tests/api)
 ├── data/                      # Tệp Excel danh mục 3.470 tư liệu gốc của Khoa (chỉ đọc)
-├── prompts/                   # Kế hoạch & prompt cho luồng agent (Opus → Argon → Gemini Flash)
 ├── db/                        # Kịch bản DDL tạo bảng (schema.sql) và khung nhìn (views.sql)
 ├── docs/                      # Tài liệu đề bài, sơ đồ ERD gốc (erd.mmd, erd.png, file PDF mô tả)
 ├── public/                    # Giao diện web tĩnh (HTML, CSS và JavaScript render client)
@@ -176,15 +173,12 @@ CK/
 │   ├── tai_lieu/              # Từ điển dữ liệu CSDL, sơ đồ ERD, đặc tả API Flask
 │   ├── so_lieu/               # 5 tệp số liệu CSV phục vụ phân tích
 │   ├── bieu_do/               # 5 biểu đồ Matplotlib tương ứng số liệu
-│   ├── screenshots/           # Ảnh chụp giao diện theo 3 vai trò (1440px, 390px) & dashboard
-│   ├── milestones/            # Nhật ký kiểm chứng từng chặng (M1 – M7)
-│   └── TONG_KET.md            # Báo cáo tổng kết toàn diện dự án
+│   └── screenshots/           # Ảnh chụp giao diện theo 3 vai trò (1440px, 390px) & dashboard
 ├── scripts/                   # Kịch bản ETL nạp dữ liệu thật & sinh dữ liệu mô phỏng Zipf
 ├── server/                    # Máy chủ backend Python Flask & các module Blueprint API
 ├── tests/                     # Toàn bộ kiểm thử tự động của hệ thống
 │   ├── api/                   # 25 ca kiểm thử Backend API bằng pytest (test_api.py)
 │   └── ui/                    # 33 ca kiểm thử giao diện & dashboard bằng Playwright (*.spec.js)
 ├── tools/                     # Công cụ tiện ích (demo_reset.py, screenshots.js, export_report.py)
-│   └── agy/                   # Prompt giao việc cho agy (Argon) + nhật ký chạy (logs/)
 └── uploads/                   # Thư mục lưu trữ bản mềm PDF số hóa (kèm file mẫu uploads/mau/)
 ```
