@@ -1,0 +1,24 @@
+Bạn là Argon (điều phối). Đọc AGENTS.md (mục 2 VỪA ĐỔI: backend chuyển sang Python Flask), prompts/05-giao-viec-agy.md (lưu ý kỹ thuật + giới hạn an toàn), prompts/01-teamwork.md mục M3. CHỈ làm M3b.
+
+M3b — CHUYỂN BACKEND TỪ NODE/EXPRESS SANG PYTHON FLASK, GIỮ NGUYÊN API.
+Bối cảnh: server/ hiện là Express (đã pass 25 test node --test). Giao diện public/ (M4, M5) gọi /api/... và đang pass Playwright. Người dùng muốn toàn dự án dùng Python. Hợp đồng API (đường dẫn, phương thức, mã HTTP, tên trường JSON request/response, cookie session) PHẢI GIỮ Y HỆT để public/ không phải sửa.
+
+Việc:
+1. Subagent IMPLEMENT:
+   - Đọc kỹ toàn bộ server/*.js, server/routes/*.js, server/middleware/auth.js, server/tests/api.test.js để lấy hợp đồng API chính xác (kể cả tên trường lỗi, mã 400/401/403/404/409, phân trang, /api/gioi-thieu, /api/ban-mem/:id, upload).
+   - Viết backend Flask: server/app.py (tạo app, phục vụ public/ ở "/", đăng ký Blueprint, lỗi 404 /api trả JSON, chạy cổng PORT trong .env mặc định 3000 khi `python server/app.py`), server/db.py (psycopg2 + ThreadedConnectionPool, DATABASE_URL từ .env qua python-dotenv, client_encoding UTF8), server/auth.py (decorator yeu_cau_vai_tro('*'|'nguoi_dung'|'thu_thu'): chưa đăng nhập 401, sai vai trò 403), server/routes/*.py tương ứng auth, tai_lieu (tìm kiếm/gợi ý/chi tiết/bản mềm), muon, quan_ly, thong_ke.
+   - Giữ các quy tắc: SQL chỉ dùng tham số %s; tìm kiếm & gợi ý dùng hàm SQL tim_tai_lieu/f_chuan_hoa; chỉ log khi q không rỗng và trang 1; ma_phien = id phiên (uuid lưu trong session Flask, phát cookie cả cho khách); POST /tim-kiem/:logId/chon chỉ cập nhật log cùng ma_phien; duyệt mượn trong transaction SELECT ... FOR UPDATE, hết bản sao → 409; upload chỉ PDF (đuôi .pdf + mimetype + 4 byte %PDF), MAX_CONTENT_LENGTH 20MB, lưu uploads/, chống path traversal; thống kê không trả nguoi_dung_id/ma_phien; SECRET_KEY lấy từ SESSION_SECRET trong .env.
+   - Viết server/tests/test_api.py (pytest + Flask test client) chuyển đủ 25 tình huống của api.test.js (tối thiểu 5 tình huống bắt buộc của M3), tự dọn dữ liệu tạo ra.
+   - Thêm Flask, pytest vào scripts/requirements.txt và pip install.
+   - Sửa playwright.config.js: webServer.command = "python server/app.py" (giữ cổng 3000).
+   - Sau khi bản Python pass: XÓA server/app.js, server/db.js, server/middleware/, server/routes/*.js, server/tests/api.test.js. Sửa package.json: "start": "python server/app.py", "test": "python -m pytest server/tests -q", bỏ dependency express, express-session, pg, bcrypt, multer, dotenv, supertest (giữ @playwright/test), chạy npm install để cập nhật lock.
+2. Subagent TEST (khác implement) chạy LỆNH KIỂM CHỨNG M3b:
+   python -m pytest server/tests -q   → pass toàn bộ
+   npx playwright test   → toàn bộ test giao diện hiện có (tests/*.spec.js của M4, M5) pass trên backend Python, không lỗi console
+   rg -n "require\(|express" server  → rỗng (không còn mã Node trong server/)
+3. Subagent AUDIT (khác hai subagent trên): so từng route Flask với bản Express cũ (đọc qua git không có -> đọc file .js TRƯỚC khi bị xóa, hoặc dựa vào test); kiểm tra SQL tham số, decorator phân quyền trên MỌI route, cờ du_lieu_mau, không lộ dữ liệu cá nhân trong thống kê.
+Lặp implement → test → sửa tối đa 3 vòng; quá 3 vòng làm theo /boost. Ghi reports/milestones/M3b.md: file tạo/sửa/xóa, output lệnh kiểm chứng NGUYÊN VĂN, kết quả audit, vấn đề còn lại. Ở cuối reports/milestones/M3.md thêm 1 dòng: "Đã thay bằng backend Flask, xem M3b.md".
+
+Sau khi gọi subagent, kết thúc lượt để chờ hệ thống đánh thức (tiến trình được giữ sống). Không hỏi lại người dùng.
+Khi M3b HOÀN TẤT (PASS, hoặc FAIL sau boost), câu trả lời cuối cùng phải kết thúc bằng một dòng riêng đúng là: MILESTONE_XONG
+Tuyệt đối không viết chuỗi đó ở chỗ nào khác trước khi thực sự xong.

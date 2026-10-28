@@ -1,0 +1,42 @@
+Bạn là Argon (điều phối). Đọc AGENTS.md, prompts/05-giao-viec-agy.md (giới hạn an toàn), reports/TONG_KET.md. M1–M6 đã PASS và đã được Opus audit. CHỈ làm M7.
+
+M7 — DỌN VÀ TỐI ƯU CẤU TRÚC THƯ MỤC (KHÔNG thêm tính năng, KHÔNG đổi hành vi web, KHÔNG đổi API, KHÔNG đổi giao diện nhìn thấy).
+
+Việc cần làm (Opus đã chốt):
+A. File rác / sinh tự động
+  1. Tạo .gitignore: node_modules/, .env, __pycache__/, *.pyc, .pytest_cache/, test-results/, playwright-report/, .Rhistory, logs/, uploads/* nhưng GIỮ uploads/mau/ (dùng !uploads/mau/ và !uploads/mau/**), reports/screenshots/.
+  2. KHÔNG xóa .Rhistory và logs/ (không phải của dự án, do công cụ khác của người dùng tạo) — chỉ đưa vào .gitignore.
+  3. Chuyển "Mô tả bài toán Web thư viện chuyển đổi số.pdf" từ thư mục gốc vào docs/ (giữ nguyên tên).
+B. Tách JavaScript nội tuyến
+  4. Mỗi trang public/*.html đang có 1 khối <script> nội tuyến dài. Chuyển nguyên văn nội dung mỗi khối sang public/js/trang/<ten-trang>.js (index.js, tra-cuu.js, chi-tiet.js, tai-khoan.js, quan-ly.js, dashboard.js) và thay bằng <script src="js/trang/<ten-trang>.js"></script> đặt đúng vị trí cũ (sau js/main.js và sau CDN Chart.js/wordcloud2 ở dashboard). Không đổi logic. Sau bước này không trang nào còn <script> nội tuyến dài quá 5 dòng.
+C. Sắp lại reports/ (chỉ để đầu ra phục vụ báo cáo)
+  5. Cấu trúc mới:
+     reports/etl/            ← etl_tom_tat.csv, etl_bi_bo.csv   (scripts/etl_import.py ghi vào đây)
+     reports/seed/           ← seed_tom_tat.md, zipf.png        (scripts/seed_demo.py ghi vào đây; sửa link ảnh trong md)
+     reports/tai_lieu/       ← api.md, tu_dien_du_lieu.md, erd.png (tools/export_report.py ghi vào đây)
+     reports/so_lieu/, reports/bieu_do/, reports/screenshots/, reports/milestones/, reports/TONG_KET.md  (giữ)
+  6. Nhật ký chạy agent (reports/agy/) và tools/agy/run-milestone.sh: KHÔNG ĐỤNG VÀO trong M7 — script này đang chạy chính phiên của bạn và đang ghi log vào reports/agy/run-M7.ndjson; sửa/di chuyển sẽ làm hỏng phiên. Opus sẽ tự chuyển reports/agy → tools/agy/logs sau khi M7 xong. Trong lệnh rg kiểm chứng bên dưới, chuỗi "reports/agy" được phép còn trong tools/agy/run-milestone.sh.
+  7. Ảnh chụp trùng: reports/screenshots/<vai_tro>/ đang có cả x.png và x_1440.png (trùng nội dung). Sửa tools/screenshots.js để chỉ sinh x_1440.png và x_390.png (ảnh thành phần dashboard giữ tên cũ, chỉ ở reports/screenshots/dashboard/, không lặp trong thu_thu/). Xóa ảnh trùng cũ.
+D. Kiểm thử gom về một chỗ
+  8. Chuyển tests/ui.spec.js, tests/dashboard.spec.js → tests/ui/ ; chuyển server/tests/ → tests/api/ (test_api.py, __init__.py, conftest nếu có; sửa import để vẫn chạy được `python -m pytest tests/api -q` từ thư mục gốc). Sửa playwright.config.js (testDir: 'tests/ui'), package.json ("test": "python -m pytest tests/api -q", "test:ui": "playwright test"), pytest config nếu cần (pytest.ini với testpaths = tests/api, pythonpath = .).
+E. Cập nhật tài liệu theo cấu trúc mới
+  9. AGENTS.md mục 7 (cây thư mục) và các đường dẫn trong README.md, reports/TONG_KET.md (thêm dòng M7), prompts/05-giao-viec-agy.md nếu nhắc đường dẫn cũ. Thêm vào README một mục "Cấu trúc thư mục" ngắn (cây + 1 dòng mô tả mỗi thư mục).
+  10. Mọi lệnh kiểm chứng cũ trong reports/milestones/*.md GIỮ NGUYÊN (là lịch sử), chỉ thêm ghi chú đường dẫn mới ở M7.md.
+
+Quy trình: invoke_subagent Model "flash" với 3 subagent KHÁC NHAU: IMPLEMENT, TEST, AUDIT. Có thể chia IMPLEMENT thành 2 lượt tuần tự (A+B+D rồi C+E) nhưng KHÔNG chạy song song hai subagent cùng sửa file.
+LỆNH KIỂM CHỨNG M7 (TEST chạy, dán nguyên văn vào reports/milestones/M7.md):
+  python tools/demo_reset.py
+  python -m pytest tests/api -q                         → pass toàn bộ (25)
+  npx playwright test                                   → pass toàn bộ (33)
+  npm run screenshots                                   → không còn file <trang>.png không hậu tố trong reports/screenshots/khach|nguoi_dung|thu_thu
+  python tools/export_report.py                         → sinh đủ reports/tai_lieu/{api.md,tu_dien_du_lieu.md,erd.png}, reports/so_lieu/*.csv, reports/bieu_do/*.png
+  rg -c "<script>" public/*.html ; với mỗi khối <script> nội tuyến còn lại phải ≤ 5 dòng
+  rg -n "reports/agy|server/tests|reports/etl_|reports/seed_tom_tat|reports/zipf|reports/api.md|reports/tu_dien|reports/erd.png" --glob "!reports/milestones/**" --glob "!tools/agy/logs/**" --glob "!node_modules/**" .   → rỗng (trừ dòng ghi chú lịch sử trong TONG_KET.md nếu có, phải giải thích)
+  test -f .gitignore ; test -f "docs/Mô tả bài toán Web thư viện chuyển đổi số.pdf"
+  python tools/demo_reset.py   (chạy lại lần cuối để demo ở trạng thái sạch)
+AUDIT: so sánh hành vi trước/sau (các test là thước đo), xác nhận không đổi logic JS khi tách file (so từng khối), không đổi API, không xóa file của người dùng ngoài phạm vi trên.
+Lặp tối đa 3 vòng; quá 3 vòng làm theo /boost. Ghi reports/milestones/M7.md: file chuyển/tạo/sửa/xóa (bảng trước → sau), output lệnh kiểm chứng NGUYÊN VĂN, kết quả audit, vấn đề còn lại.
+
+Sau khi gọi subagent, kết thúc lượt để chờ hệ thống đánh thức (tiến trình được giữ sống). Không hỏi lại người dùng.
+Khi M7 HOÀN TẤT (PASS, hoặc FAIL sau boost), câu trả lời cuối cùng phải kết thúc bằng một dòng riêng đúng là: MILESTONE_XONG
+Tuyệt đối không viết chuỗi đó ở chỗ nào khác trước khi thực sự xong.

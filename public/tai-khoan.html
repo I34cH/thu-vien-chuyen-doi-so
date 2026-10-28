@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tài khoản độc giả & Lịch sử mượn - Thư viện Đại học">
+  <title>Tài Khoản & Lịch Sử Mượn | Thư Viện Đại Học</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Banner DỮ LIỆU MẪU cố định trên mọi trang (AGENTS.md mục 4.7) -->
+  <div class="demo-banner">
+    <i class="fa-solid fa-triangle-exclamation"></i> Dữ liệu log, lượt mượn, người dùng là DỮ LIỆU MẪU phục vụ demo
+  </div>
+
+  <!-- Top Bar -->
+  <aside class="top-bar" aria-label="Thông báo phục vụ">
+    <div class="container">
+      <div class="top-bar-info">
+        <span><i class="fa-regular fa-clock"></i> Giờ phục vụ: 07:30 - 21:00</span>
+        <span><i class="fa-solid fa-phone"></i> Đường dây nóng: (024) 3858 4615</span>
+      </div>
+      <div class="top-bar-actions">
+        <a href="tra-cuu.html"><i class="fa-solid fa-magnifying-glass"></i> Tra cứu OPAC</a>
+        <a href="index.html"><i class="fa-solid fa-house"></i> Về trang chủ</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container">
+      <div class="brand-wrapper">
+        <div class="brand-logo-icon"><i class="fa-solid fa-landmark-dome"></i></div>
+        <div class="brand-title-group">
+          <h1>TRUNG TÂM THƯ VIỆN VÀ TRI THỨC SỐ</h1>
+          <p>Cổng Thông Tin Tài Khoản Độc Giả &amp; Quản Trị Hệ Thống</p>
+        </div>
+      </div>
+      <div class="user-quick-profile">
+        <img src="https://ui-avatars.com/api/?name=Khach&background=9b1c1c&color=fff" 
+             alt="Ảnh thẻ" class="user-avatar">
+        <div class="user-details">
+          <span class="user-name">Đang tải...</span>
+          <span class="user-role">---</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <nav class="main-nav" aria-label="Điều hướng">
+    <div class="container">
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Trang chủ</a>
+        </li>
+        <li class="nav-item">
+          <a href="tra-cuu.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Tra cứu OPAC</a>
+        </li>
+        <li class="nav-item active">
+          <a href="tai-khoan.html" class="nav-link"><i class="fa-solid fa-id-card"></i> Tài khoản</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Nội dung trang Tài khoản -->
+  <main class="container" style="padding-top: 35px; padding-bottom: 60px;">
+    
+    <!-- KHỐI 1: FORM ĐĂNG NHẬP (Hiển thị khi chưa đăng nhập) -->
+    <section id="sectionLogin" style="max-width: 480px; margin: 0 auto; display: none;">
+      <div class="card-panel" style="padding: 32px;">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <div class="brand-logo-icon" style="margin: 0 auto 14px; width: 60px; height: 60px; font-size: 2rem;">
+            <i class="fa-solid fa-user-lock"></i>
+          </div>
+          <h2 style="font-size: 1.4rem; color: var(--color-primary-dark); font-weight: 700;">ĐĂNG NHẬP HỆ THỐNG</h2>
+          <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 4px;">Dành cho Sinh viên, Giảng viên và Thủ thư</p>
+        </div>
+
+        <div id="loginAlertBox" style="display: none; padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 18px; font-size: 0.88rem;"></div>
+
+        <form id="formLogin" class="form-academic">
+          <div class="form-group">
+            <label for="inputTenDangNhap">Tên đăng nhập <span class="required">*</span></label>
+            <input type="text" id="inputTenDangNhap" class="form-control" placeholder="Ví dụ: sv01, gv01, thuthu" required autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label for="inputMatKhau">Mật khẩu <span class="required">*</span></label>
+            <input type="password" id="inputMatKhau" class="form-control" placeholder="Nhập mật khẩu" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn-primary-block" id="btnLoginSubmit" style="margin-top: 8px;">
+            <i class="fa-solid fa-right-to-bracket"></i> Đăng nhập
+          </button>
+        </form>
+
+        <!-- Nút điền nhanh tài khoản demo -->
+        <div style="margin-top: 25px; padding-top: 20px; border-top: 1px dashed var(--color-border);">
+          <p style="font-size: 0.82rem; font-weight: 600; color: var(--color-text-muted); margin-bottom: 10px; text-align: center;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Tài khoản demo có sẵn:
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button type="button" class="btn-quick-login" data-user="sv01" data-pass="sv123" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--color-border); border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+              <span><strong>Sinh viên:</strong> sv01</span>
+              <span class="badge badge-info">sv123</span>
+            </button>
+            <button type="button" class="btn-quick-login" data-user="gv01" data-pass="gv123" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--color-border); border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+              <span><strong>Giảng viên:</strong> gv01</span>
+              <span class="badge badge-info">gv123</span>
+            </button>
+            <button type="button" class="btn-quick-login" data-user="thuthu" data-pass="thuthu123" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fdf2f2; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+              <span style="color: var(--color-primary);"><strong>Thủ thư:</strong> thuthu</span>
+              <span class="badge badge-danger">thuthu123</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KHỐI 2: HỒ SƠ ĐÃ ĐĂNG NHẬP & LỊCH SỬ MƯỢN SÁCH -->
+    <section id="sectionProfile" style="display: none;">
+      
+      <!-- Thẻ thông tin tài khoản -->
+      <div class="card-panel" style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+          <div style="display: flex; gap: 18px; align-items: center;">
+            <img src="https://ui-avatars.com/api/?name=User&background=9b1c1c&color=fff" id="profileAvatar" 
+                 alt="Avatar" style="width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--color-primary); object-fit: cover;">
+            <div>
+              <h2 id="profileFullName" style="font-size: 1.4rem; font-weight: 700; color: var(--color-primary-dark); margin-bottom: 4px;">---</h2>
+              <div style="display: flex; gap: 10px; align-items: center; font-size: 0.88rem; color: var(--color-text-muted);">
+                <span><i class="fa-solid fa-user-tag"></i> <span id="profileUsername">---</span></span>
+                <span>&bull;</span>
+                <span id="profileRoleBadge" class="badge badge-info">---</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <div id="profileSpecialLinks"></div>
+            <button type="button" id="btnLogoutAction" class="btn-primary-block" style="width: auto; padding: 9px 18px; font-size: 0.88rem; background: #64748b;">
+              <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bảng lịch sử mượn (Dành cho Sinh viên / Giảng viên) -->
+      <div id="borrowHistoryCard" class="card-panel" style="display: none;">
+        <div class="panel-header">
+          <h3 class="panel-title"><i class="fa-solid fa-clock-rotate-left"></i> LỊCH SỬ ĐĂNG KÝ VÀ MƯỢN TƯ LIỆU</h3>
+          <span id="borrowCountBadge" class="badge badge-info">0 lượt mượn</span>
+        </div>
+
+        <div class="table-container">
+          <table class="academic-table" id="myBorrowTable">
+            <thead>
+              <tr>
+                <th style="width: 60px;">Mã</th>
+                <th>Nhan đề tư liệu</th>
+                <th>Loại hình</th>
+                <th>Mã bản sao</th>
+                <th>Ngày đăng ký</th>
+                <th>Hạn trả</th>
+                <th>Trạng thái</th>
+                <th>Bản mềm</th>
+              </tr>
+            </thead>
+            <tbody id="myBorrowTableBody">
+              <tr>
+                <td colspan="8" style="text-align: center; padding: 30px; color: var(--color-text-muted);">
+                  <i class="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu mượn...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Khu vực điều hướng cho Thủ thư -->
+      <div id="librarianQuickCard" class="card-panel" style="display: none; background: #fffaf0; border-color: #feebc8;">
+        <div class="panel-header">
+          <h3 class="panel-title" style="color: #c05621;"><i class="fa-solid fa-user-shield"></i> PHÂN HỆ QUẢN TRỊ THỦ THƯ</h3>
+        </div>
+        <p style="color: var(--color-text-main); margin-bottom: 20px;">
+          Bạn đang đăng nhập với vai trò <strong>Thủ thư</strong>. Vui lòng truy cập các phân hệ chuyên trách:
+        </p>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+          <a href="quan-ly.html" class="btn-primary-block" style="width: auto; padding: 12px 24px;">
+            <i class="fa-solid fa-book-bookmark"></i> Quản lý Duyệt &amp; Trả Mượn
+          </a>
+          <a href="dashboard.html" class="btn-primary-block" style="width: auto; padding: 12px 24px; background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover)); color: #fff;">
+            <i class="fa-solid fa-chart-pie"></i> Xem Dashboard Thống kê &amp; Số hóa
+          </a>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Chân trang -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 Bản quyền thuộc về Trung tâm Thư viện. Ứng dụng Demo Web thư viện chuyển đổi số.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/trang/tai-khoan.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+erDiagram
+    nguoi_dung ||--o{ luot_muon : "đăng ký"
+    nguoi_dung |o--o{ log_tim_kiem : "tìm (NULL nếu khách)"
+    tai_lieu ||--o{ ban_sao : "có"
+    ban_sao |o--o{ luot_muon : "được gán khi duyệt"
+    tai_lieu ||--o{ luot_muon : "yêu cầu"
+    tai_lieu |o--o{ log_tim_kiem : "được chọn"
+    ma_van_de |o--o{ tai_lieu : "phân loại"
+
+    nguoi_dung {
+        int id PK
+        varchar ten_dang_nhap UK
+        varchar mat_khau_hash
+        varchar ho_ten
+        varchar vai_tro "sinh_vien|giang_vien|thu_thu|admin"
+        bool du_lieu_mau
+    }
+    tai_lieu {
+        int id PK
+        varchar ky_hieu UK
+        varchar loai_hinh "luan_an|luan_van|khoa_luan|bao_cao_kh|ky_yeu|sach|..."
+        text tieu_de
+        varchar tac_gia
+        varchar gvhd
+        varchar co_quan
+        varchar nxb
+        int nam
+        varchar nam_goc
+        varchar ma_van_de FK
+        varchar khoa_hoc
+        text ghi_chu
+        bool khong_co_tl
+        bool co_ban_mem
+        varchar muc_truy_cap "cong_khai|noi_bo|NULL"
+        varchar duong_dan_ban_mem
+        tsvector tsv "unaccent(tieu_de, tac_gia)"
+        varchar sheet_goc
+        int dong_goc
+    }
+    ban_sao {
+        int id PK
+        int tai_lieu_id FK
+        varchar ma_ban_sao UK
+        varchar trang_thai "con|dang_muon|mat"
+        bool du_lieu_mau
+    }
+    luot_muon {
+        int id PK
+        int nguoi_dung_id FK
+        int tai_lieu_id FK
+        int ban_sao_id FK "NULL khi chờ duyệt"
+        varchar trang_thai "cho_duyet|dang_muon|da_tra|tu_choi"
+        timestamptz ngay_dang_ky
+        date ngay_muon
+        date han_tra
+        date ngay_tra
+        bool du_lieu_mau
+    }
+    log_tim_kiem {
+        bigint id PK
+        text tu_khoa
+        text tu_khoa_chuan "lower(unaccent(trim))"
+        int so_ket_qua
+        int tai_lieu_chon_id FK
+        timestamptz thoi_diem
+        int nguoi_dung_id FK "NULL nếu khách"
+        varchar ma_phien
+        bool du_lieu_mau
+    }
+    ma_van_de {
+        varchar ma PK
+        varchar ten
+    }

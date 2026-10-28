@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Phân hệ Quản lý Mượn - Trả & Số hóa - Thư viện Đại học">
+  <title>Quản Lý Mượn - Trả &amp; Số Hóa | Thư Viện Đại Học</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Banner DỮ LIỆU MẪU cố định trên mọi trang (AGENTS.md mục 4.7) -->
+  <div class="demo-banner">
+    <i class="fa-solid fa-triangle-exclamation"></i> Dữ liệu log, lượt mượn, người dùng là DỮ LIỆU MẪU phục vụ demo
+  </div>
+
+  <!-- Top Bar -->
+  <aside class="top-bar" aria-label="Thông báo phục vụ">
+    <div class="container">
+      <div class="top-bar-info">
+        <span><i class="fa-regular fa-clock"></i> Phân hệ nghiệp vụ Thủ thư</span>
+        <span><i class="fa-solid fa-phone"></i> Hỗ trợ kỹ thuật: (024) 3858 4615</span>
+      </div>
+      <div class="top-bar-actions">
+        <a href="dashboard.html"><i class="fa-solid fa-chart-pie"></i> Xem Dashboard</a>
+        <a href="tra-cuu.html"><i class="fa-solid fa-magnifying-glass"></i> Tra cứu OPAC</a>
+        <a href="index.html"><i class="fa-solid fa-house"></i> Về trang chủ</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container">
+      <div class="brand-wrapper">
+        <div class="brand-logo-icon"><i class="fa-solid fa-landmark-dome"></i></div>
+        <div class="brand-title-group">
+          <h1>TRUNG TÂM THƯ VIỆN VÀ TRI THỨC SỐ</h1>
+          <p>Phân hệ Quản trị Nghiệp vụ Thủ thư: Duyệt Mượn - Trả &amp; Số Hóa Học Liệu</p>
+        </div>
+      </div>
+      <div class="user-quick-profile">
+        <img src="https://ui-avatars.com/api/?name=Khach&background=9b1c1c&color=fff" 
+             alt="Ảnh thẻ" class="user-avatar">
+        <div class="user-details">
+          <span class="user-name">Đang tải...</span>
+          <span class="user-role">---</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <nav class="main-nav" aria-label="Điều hướng">
+    <div class="container">
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Trang chủ</a>
+        </li>
+        <li class="nav-item">
+          <a href="tra-cuu.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Tra cứu OPAC</a>
+        </li>
+        <li class="nav-item active">
+          <a href="quan-ly.html" class="nav-link"><i class="fa-solid fa-book-bookmark"></i> Quản lý Mượn - Trả</a>
+        </li>
+        <li class="nav-item">
+          <a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Dashboard Thống kê</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Nội dung Quản lý -->
+  <main class="container" style="padding-top: 30px; padding-bottom: 60px;">
+    
+    <!-- Cảnh báo nếu không có quyền Thủ thư -->
+    <div id="librarianForbiddenCard" style="display: none; background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 50px 20px; text-align: center;">
+      <i class="fa-solid fa-shield-halved fa-3x" style="color: var(--status-danger);"></i>
+      <h3 style="font-size: 1.3rem; margin-top: 16px; color: var(--color-primary-dark);">Yêu cầu quyền Thủ thư</h3>
+      <p style="color: var(--color-text-muted); margin-top: 6px; max-width: 500px; margin-left: auto; margin-right: auto;">
+        Trang này chỉ dành cho tài khoản có vai trò <strong>Thủ thư</strong> (hoặc Quản trị viên). Vui lòng đăng nhập bằng tài khoản thủ thư (ví dụ: <code>thuthu / thuthu123</code>).
+      </p>
+      <a href="tai-khoan.html" class="btn-opac-submit" style="margin-top: 18px; display: inline-flex;">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i> Đến trang Đăng nhập
+      </a>
+    </div>
+
+    <!-- Nội dung chính phân hệ thủ thư -->
+    <div id="librarianMainContent" style="display: none;">
+      
+      <!-- HỘP THÔNG BÁO THAO TÁC -->
+      <div id="actionAlertBox" style="display: none; padding: 14px 18px; border-radius: var(--radius-sm); margin-bottom: 24px; font-size: 0.92rem;"></div>
+
+      <!-- PHẦN 1: QUẢN LÝ DUYỆT & TRẢ MƯỢN TÀI LIỆU -->
+      <section class="card-panel">
+        <div class="panel-header">
+          <h2 class="panel-title"><i class="fa-solid fa-list-check"></i> XỬ LÝ YÊU CẦU MƯỢN &amp; TRẢ TƯ LIỆU</h2>
+          <button type="button" id="btnReloadBorrows" class="filter-pill" style="border: 1px solid var(--color-border);">
+            <i class="fa-solid fa-rotate"></i> Làm mới danh sách
+          </button>
+        </div>
+
+        <div class="table-toolbar">
+          <div class="table-filter-btn-group" id="filterStatusPills">
+            <button type="button" class="filter-pill active" data-status="">Tất cả lượt mượn</button>
+            <button type="button" class="filter-pill" data-status="cho_duyet">
+              <i class="fa-solid fa-clock" style="color: #d97706;"></i> Chờ duyệt
+            </button>
+            <button type="button" class="filter-pill" data-status="dang_muon">
+              <i class="fa-solid fa-book-reader" style="color: #2563eb;"></i> Đang mượn
+            </button>
+            <button type="button" class="filter-pill" data-status="da_tra">
+              <i class="fa-solid fa-check" style="color: #16a34a;"></i> Đã trả
+            </button>
+            <button type="button" class="filter-pill" data-status="tu_choi">
+              <i class="fa-solid fa-xmark" style="color: #dc2626;"></i> Từ chối
+            </button>
+          </div>
+
+          <div style="font-size: 0.88rem; color: var(--color-text-muted);" id="borrowCountInfo">
+            Đang tải dữ liệu...
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="academic-table" id="adminBorrowTable">
+            <thead>
+              <tr>
+                <th style="width: 50px;">Mã</th>
+                <th>Người mượn</th>
+                <th>Tư liệu yêu cầu</th>
+                <th>Bản sao gán</th>
+                <th>Ngày ĐK / Hạn trả</th>
+                <th>Trạng thái</th>
+                <th style="text-align: center; width: 180px;">Thao tác xử lý</th>
+              </tr>
+            </thead>
+            <tbody id="adminBorrowTableBody">
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 30px; color: var(--color-text-muted);">
+                  <i class="fa-solid fa-spinner fa-spin"></i> Đang tải danh sách mượn...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PHẦN 2: TẢI BẢN MỀM PDF SỐ HÓA (AGENTS.md mục 4.5) -->
+      <section class="card-panel" style="margin-top: 35px;">
+        <div class="panel-header">
+          <h2 class="panel-title"><i class="fa-solid fa-cloud-arrow-up"></i> SỐ HÓA TƯ LIỆU: TẢI BẢN MỀM (PDF)</h2>
+        </div>
+        <p style="color: var(--color-text-muted); margin-bottom: 20px; font-size: 0.9rem;">
+          Tải tệp PDF số hóa cho tư liệu trong kho. Tệp chỉ chấp nhận định dạng <strong>.pdf</strong> (dung lượng tối đa 20MB). 
+          Khi số hóa thành công, tư liệu sẽ được cập nhật nhãn <em>Có bản mềm</em> và được đưa vào khai thác trực tuyến.
+        </p>
+
+        <form id="formUploadPdf" class="form-academic" style="max-width: 700px;" enctype="multipart/form-data">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="inputUploadDocId">Mã tư liệu (ID) <span class="required">*</span></label>
+              <input type="number" id="inputUploadDocId" name="docId" class="form-control" placeholder="Nhập ID tư liệu (ví dụ: 101)" required min="1">
+            </div>
+            <div class="form-group">
+              <label for="selectMucTruyCap">Mức độ truy cập <span class="required">*</span></label>
+              <select id="selectMucTruyCap" name="muc_truy_cap" class="form-control" required>
+                <option value="cong_khai" selected>Công khai (Ai cũng xem được)</option>
+                <option value="noi_bo">Nội bộ (Chỉ cán bộ/sinh viên đăng nhập)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Thông tin tóm tắt tư liệu được chọn (tự tải khi nhập ID) -->
+          <div id="uploadDocPreview" style="display: none; padding: 12px 16px; background: #f8fafc; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 0.88rem;">
+            <strong>Tư liệu:</strong> <span id="previewDocTitle" style="color: var(--color-primary-dark); font-weight: 600;">---</span>
+            <div id="previewDocStatus" style="margin-top: 4px; font-size: 0.8rem; color: var(--color-text-muted);">---</div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputFilePdf">Chọn tệp PDF số hóa <span class="required">*</span></label>
+            <input type="file" id="inputFilePdf" name="file" class="form-control" accept=".pdf,application/pdf" required>
+            <small style="color: var(--color-text-muted);">Chỉ tệp PDF hợp lệ có tiêu đề magic bytes %PDF, dung lượng tối đa 20MB.</small>
+          </div>
+
+          <div style="margin-top: 10px;">
+            <button type="submit" class="btn-primary-block" id="btnSubmitUpload" style="width: auto; padding: 12px 28px;">
+              <i class="fa-solid fa-file-arrow-up"></i> Tải bản mềm lên &amp; Cập nhật số hóa
+            </button>
+          </div>
+        </form>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Chân trang -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 Bản quyền thuộc về Trung tâm Thư viện. Ứng dụng Demo Web thư viện chuyển đổi số.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/trang/quan-ly.js"></script>
+</body>
+</html>

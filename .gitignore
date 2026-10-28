@@ -1,0 +1,17 @@
+node_modules/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+test-results/
+playwright-report/
+.Rhistory
+logs/
+uploads/*
+!uploads/mau/
+!uploads/mau/**
+reports/screenshots/
+
+# Cấu hình cục bộ của Claude Code / agent (không cần cho nhóm)
+.claude/
+tools/agy/logs/

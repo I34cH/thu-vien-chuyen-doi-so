@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tra cứu danh mục sách OPAC nâng cao - Thư viện Đại học">
+  <title>Tra Cứu Danh Mục OPAC & Học Liệu Số | Thư Viện Đại Học</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Banner DỮ LIỆU MẪU cố định trên mọi trang (AGENTS.md mục 4.7) -->
+  <div class="demo-banner">
+    <i class="fa-solid fa-triangle-exclamation"></i> Dữ liệu log, lượt mượn, người dùng là DỮ LIỆU MẪU phục vụ demo
+  </div>
+
+  <!-- Top Bar -->
+  <aside class="top-bar" aria-label="Thông báo phục vụ">
+    <div class="container">
+      <div class="top-bar-info">
+        <span><i class="fa-regular fa-clock"></i> Giờ phục vụ: 07:30 - 21:00</span>
+        <span><i class="fa-solid fa-phone"></i> Đường dây nóng: (024) 3858 4615</span>
+      </div>
+      <div class="top-bar-actions">
+        <a href="index.html#noiquy"><i class="fa-solid fa-book-open-reader"></i> Nội quy</a>
+        <a href="index.html"><i class="fa-solid fa-arrow-left"></i> Về trang chủ</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container">
+      <div class="brand-wrapper">
+        <div class="brand-logo-icon"><i class="fa-solid fa-landmark-dome"></i></div>
+        <div class="brand-title-group">
+          <h1>TRUNG TÂM THƯ VIỆN VÀ TRI THỨC SỐ</h1>
+          <p>Hệ thống Tra cứu Mục lục Trực tuyến OPAC</p>
+        </div>
+      </div>
+      <div class="user-quick-profile">
+        <img src="https://ui-avatars.com/api/?name=Khach&background=9b1c1c&color=fff" 
+             alt="Ảnh thẻ" class="user-avatar">
+        <div class="user-details">
+          <span class="user-name">Đang tải...</span>
+          <span class="user-role">---</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Nav -->
+  <nav class="main-nav" aria-label="Điều hướng">
+    <div class="container">
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Trang chủ</a>
+        </li>
+        <li class="nav-item active">
+          <a href="tra-cuu.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Tra cứu OPAC</a>
+        </li>
+        <li class="nav-item">
+          <a href="tai-khoan.html" class="nav-link"><i class="fa-solid fa-arrow-right-to-bracket"></i> Đăng nhập</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Search Header -->
+  <div class="search-page-header">
+    <div class="container">
+      <h2 style="font-size: 1.8rem; margin-bottom: 8px;">TRA CỨU DANH MỤC TÀI LIỆU & HỌC LIỆU SỐ</h2>
+      <p style="color: #cbd5e1; margin-bottom: 20px;">Tìm kiếm theo từ khóa, nhan đề, tác giả, ký hiệu tư liệu (chấp nhận gõ không dấu và sai chính tả nhẹ)</p>
+      
+      <!-- Biểu mẫu tìm kiếm có autocomplete -->
+      <form id="searchCatalogForm" style="max-width: 900px; display: flex; gap: 10px; flex-wrap: wrap;">
+        <div class="search-input-wrap" style="flex: 2; min-width: 280px;">
+          <input type="search" name="q" id="catalogSearchInput" class="form-control" style="padding: 12px 16px;" 
+                 placeholder="Nhập từ khóa tìm kiếm: luu tru, van ban, phap luat..." autocomplete="off">
+          <div id="catalogAutocompleteResults" class="autocomplete-results"></div>
+        </div>
+        <select name="loai" id="catalogLoaiSelect" class="form-control" style="flex: 1; min-width: 170px; padding: 12px;">
+          <option value="">Tất cả loại hình</option>
+          <option value="luan_an">Luận án</option>
+          <option value="luan_van">Luận văn</option>
+          <option value="khoa_luan">Khóa luận</option>
+          <option value="bao_cao_kh">Báo cáo khoa học</option>
+          <option value="ky_yeu">Kỷ yếu</option>
+          <option value="sach">Sách</option>
+          <option value="sach_ha_noi">Sách Hà Nội</option>
+          <option value="tu_sach_tang">Tủ sách tặng</option>
+        </select>
+        <button type="submit" class="btn-opac-submit" style="padding: 12px 25px;">
+          <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Layout Tra cứu -->
+  <main class="container">
+    <div class="catalog-layout">
+
+      <!-- BỘ LỌC TÌM KIẾM BÊN TRÁI -->
+      <aside class="filter-sidebar">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary); margin-bottom: 18px; border-bottom: 2px solid var(--color-border); padding-bottom: 10px;">
+          <i class="fa-solid fa-filter"></i> BỘ LỌC TƯ LIỆU
+        </h3>
+
+        <!-- Lọc theo Loại hình -->
+        <div class="filter-group">
+          <h4 class="filter-title">Loại hình tài liệu</h4>
+          <ul class="filter-options" id="filterLoaiHinhList">
+            <li>
+              <label><input type="radio" name="filterLoaiRadio" value="" checked> Tất cả</label>
+            </li>
+            <li>
+              <label><input type="radio" name="filterLoaiRadio" value="luan_an"> Luận án</label>
+            </li>
+            <li>
+              <label><input type="radio" name="filterLoaiRadio" value="luan_van"> Luận văn</label>
+            </li>
+            <li>
+              <label><input type="radio" name="filterLoaiRadio" value="khoa_luan"> Khóa luận</label>
+            </li>
+            <li>
+              <label><input type="radio" name="filterLoaiRadio" value="bao_cao_kh"> Báo cáo khoa học</label>
+            </li>
+            <li>
+              <label><input type="radio" name="filterLoaiRadio" value="ky_yeu"> Kỷ yếu</label>
+            </li>
+            <li>
+              <label><input type="radio" name="filterLoaiRadio" value="sach"> Sách in</label>
+            </li>
+            <li>
+              <label><input type="radio" name="filterLoaiRadio" value="sach_ha_noi"> Sách Hà Nội</label>
+            </li>
+            <li>
+              <label><input type="radio" name="filterLoaiRadio" value="tu_sach_tang"> Tủ sách tặng</label>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Lọc theo Năm xuất bản / hoàn thành -->
+        <div class="filter-group">
+          <h4 class="filter-title">Năm xuất bản / hoàn thành</h4>
+          <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
+            <input type="number" id="filterTuNam" class="form-control" style="padding: 8px;" placeholder="Từ năm" min="1900" max="2030">
+            <span>-</span>
+            <input type="number" id="filterDenNam" class="form-control" style="padding: 8px;" placeholder="Đến năm" min="1900" max="2030">
+          </div>
+        </div>
+
+        <button type="button" id="btnApplyFilter" class="btn-primary-block" style="padding: 10px; font-size: 0.9rem; margin-top: 10px;">
+          <i class="fa-solid fa-check"></i> Áp dụng bộ lọc
+        </button>
+        <button type="button" id="btnResetFilter" style="width: 100%; margin-top: 8px; background: none; border: 1px solid var(--color-border); padding: 8px; border-radius: var(--radius-md); cursor: pointer; color: var(--color-text-muted); font-size: 0.85rem;">
+          <i class="fa-solid fa-rotate-left"></i> Đặt lại bộ lọc
+        </button>
+      </aside>
+
+      <!-- DANH SÁCH KẾT QUẢ BÊN PHẢI -->
+      <section>
+        <div class="search-toolbar">
+          <div id="searchSummaryText" style="font-size: 0.95rem; font-weight: 500; color: var(--color-text-main);">
+            Đang tải dữ liệu...
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <label for="selectPageSize" style="font-size: 0.85rem; color: var(--color-text-muted);">Hiển thị:</label>
+            <select id="selectPageSize" class="form-control" style="width: auto; padding: 6px 12px; font-size: 0.85rem;">
+              <option value="10">10 bản ghi</option>
+              <option value="20" selected>20 bản ghi</option>
+              <option value="50">50 bản ghi</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Danh sách kết quả -->
+        <div id="resultsListContainer">
+          <div style="text-align: center; padding: 40px; color: var(--color-text-muted);">
+            <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+            <p style="margin-top: 12px;">Đang tải danh mục tư liệu...</p>
+          </div>
+        </div>
+
+        <!-- Phân trang -->
+        <div class="pagination" id="paginationContainer" style="display: none;"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Chân trang -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 Bản quyền thuộc về Trung tâm Thư viện. Ứng dụng Demo Web thư viện chuyển đổi số.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/trang/tra-cuu.js"></script>
+</body>
+</html>

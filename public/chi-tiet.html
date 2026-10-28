@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Chi tiết tài liệu - Thư viện Đại học">
+  <title>Chi Tiết Tư Liệu | Thư Viện Đại Học</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Banner DỮ LIỆU MẪU cố định trên mọi trang (AGENTS.md mục 4.7) -->
+  <div class="demo-banner">
+    <i class="fa-solid fa-triangle-exclamation"></i> Dữ liệu log, lượt mượn, người dùng là DỮ LIỆU MẪU phục vụ demo
+  </div>
+
+  <!-- Top Bar -->
+  <aside class="top-bar" aria-label="Thông báo phục vụ">
+    <div class="container">
+      <div class="top-bar-info">
+        <span><i class="fa-regular fa-clock"></i> Giờ phục vụ: 07:30 - 21:00</span>
+        <span><i class="fa-solid fa-phone"></i> Đường dây nóng: (024) 3858 4615</span>
+      </div>
+      <div class="top-bar-actions">
+        <a href="tra-cuu.html"><i class="fa-solid fa-arrow-left"></i> Quay lại tra cứu</a>
+        <a href="index.html"><i class="fa-solid fa-house"></i> Về trang chủ</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container">
+      <div class="brand-wrapper">
+        <div class="brand-logo-icon"><i class="fa-solid fa-landmark-dome"></i></div>
+        <div class="brand-title-group">
+          <h1>TRUNG TÂM THƯ VIỆN VÀ TRI THỨC SỐ</h1>
+          <p>Thông tin chi tiết ấn phẩm &amp; Đăng ký mượn học liệu</p>
+        </div>
+      </div>
+      <div class="user-quick-profile">
+        <img src="https://ui-avatars.com/api/?name=Khach&background=9b1c1c&color=fff" 
+             alt="Ảnh thẻ" class="user-avatar">
+        <div class="user-details">
+          <span class="user-name">Đang tải...</span>
+          <span class="user-role">---</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <nav class="main-nav" aria-label="Điều hướng">
+    <div class="container">
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Trang chủ</a>
+        </li>
+        <li class="nav-item active">
+          <a href="tra-cuu.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Tra cứu OPAC</a>
+        </li>
+        <li class="nav-item">
+          <a href="tai-khoan.html" class="nav-link"><i class="fa-solid fa-arrow-right-to-bracket"></i> Đăng nhập</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Content Chi tiết -->
+  <main class="container" style="padding-top: 30px; padding-bottom: 50px;">
+    
+    <div id="detailLoadingBox" style="text-align: center; padding: 60px; color: var(--color-text-muted);">
+      <i class="fa-solid fa-spinner fa-spin fa-3x"></i>
+      <p style="margin-top: 16px; font-size: 1.05rem;">Đang tải thông tin chi tiết tư liệu...</p>
+    </div>
+
+    <div id="detailErrorBox" style="display: none; background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 40px; text-align: center;">
+      <i class="fa-solid fa-circle-exclamation fa-3x" style="color: var(--status-danger);"></i>
+      <h3 style="margin-top: 14px; color: var(--color-text-main);" id="detailErrorMsg">Không tìm thấy tư liệu yêu cầu.</h3>
+      <a href="tra-cuu.html" class="btn-opac-submit" style="margin-top: 18px; display: inline-flex;">
+        <i class="fa-solid fa-magnifying-glass"></i> Quay lại trang tra cứu
+      </a>
+    </div>
+
+    <div id="detailContentCard" style="display: none;" class="card-panel">
+      
+      <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+        <!-- Cột ảnh bìa / biểu trưng tư liệu -->
+        <div style="width: 220px; flex-shrink: 0;">
+          <div class="book-cover-placeholder" style="height: 300px; border-radius: var(--radius-md); box-shadow: var(--shadow-md);">
+            <i class="fa-solid fa-book-open-reader" style="font-size: 4rem;"></i>
+            <span id="docLoaiBadge" class="cover-label" style="font-size: 0.95rem; margin-top: 12px;">LOẠI HÌNH</span>
+          </div>
+
+          <!-- Nút hành động nhanh bên dưới ảnh bìa -->
+          <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div id="docSoftCopyActionArea"></div>
+            <div id="docBorrowActionArea"></div>
+          </div>
+        </div>
+
+        <!-- Cột thông tin chi tiết -->
+        <div style="flex: 1; min-width: 300px;">
+          <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
+            <span id="docLoaiPill" class="badge" style="background: #fdf2f2; color: var(--color-primary); font-size: 0.85rem; font-weight: 600;">---</span>
+            <span id="docStatusBadge"></span>
+            <span id="docSoftCopyPill"></span>
+          </div>
+
+          <h2 id="docTitle" style="font-size: 1.6rem; font-weight: 700; color: var(--color-primary-dark); line-height: 1.3; margin-bottom: 16px;">
+            Đang tải nhan đề...
+          </h2>
+
+          <div style="background-color: #f8fafc; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 20px; margin-bottom: 24px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+              <tbody>
+                <tr style="border-bottom: 1px dashed var(--color-border);">
+                  <td style="padding: 8px 0; width: 180px; font-weight: 600; color: var(--color-text-muted);"><i class="fa-regular fa-user"></i> Tác giả:</td>
+                  <td style="padding: 8px 0; font-weight: 600; color: var(--color-primary);" id="docTacGia">---</td>
+                </tr>
+                <tr style="border-bottom: 1px dashed var(--color-border);">
+                  <td style="padding: 8px 0; font-weight: 600; color: var(--color-text-muted);"><i class="fa-solid fa-barcode"></i> Ký hiệu tư liệu:</td>
+                  <td style="padding: 8px 0; font-family: monospace; font-weight: 700;" id="docKyHieu">---</td>
+                </tr>
+                <tr style="border-bottom: 1px dashed var(--color-border);">
+                  <td style="padding: 8px 0; font-weight: 600; color: var(--color-text-muted);"><i class="fa-regular fa-calendar"></i> Năm:</td>
+                  <td style="padding: 8px 0;" id="docNam">---</td>
+                </tr>
+                <tr style="border-bottom: 1px dashed var(--color-border);" id="rowNxb">
+                  <td style="padding: 8px 0; font-weight: 600; color: var(--color-text-muted);"><i class="fa-solid fa-building-columns"></i> Nhà xuất bản:</td>
+                  <td style="padding: 8px 0;" id="docNxb">---</td>
+                </tr>
+                <tr style="border-bottom: 1px dashed var(--color-border);" id="rowMaVanDe">
+                  <td style="padding: 8px 0; font-weight: 600; color: var(--color-text-muted);"><i class="fa-solid fa-tags"></i> Vấn đề:</td>
+                  <td style="padding: 8px 0;" id="docMaVanDe">---</td>
+                </tr>
+                <tr style="border-bottom: 1px dashed var(--color-border);" id="rowGvhd">
+                  <td style="padding: 8px 0; font-weight: 600; color: var(--color-text-muted);"><i class="fa-solid fa-chalkboard-user"></i> GVHD:</td>
+                  <td style="padding: 8px 0;" id="docGvhd">---</td>
+                </tr>
+                <tr style="border-bottom: 1px dashed var(--color-border);" id="rowCoQuan">
+                  <td style="padding: 8px 0; font-weight: 600; color: var(--color-text-muted);"><i class="fa-solid fa-location-dot"></i> Cơ quan / Địa điểm:</td>
+                  <td style="padding: 8px 0;" id="docCoQuan">---</td>
+                </tr>
+                <tr style="border-bottom: 1px dashed var(--color-border);" id="rowHeKhoa">
+                  <td style="padding: 8px 0; font-weight: 600; color: var(--color-text-muted);"><i class="fa-solid fa-graduation-cap"></i> Hệ / Khóa:</td>
+                  <td style="padding: 8px 0;" id="docHeKhoa">---</td>
+                </tr>
+                <tr id="rowGhiChu">
+                  <td style="padding: 8px 0; font-weight: 600; color: var(--color-text-muted);"><i class="fa-regular fa-note-sticky"></i> Ghi chú:</td>
+                  <td style="padding: 8px 0; color: var(--color-text-muted);" id="docGhiChu">---</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Thông báo kết quả mượn -->
+          <div id="borrowAlertMsg" style="display: none; padding: 14px 18px; border-radius: var(--radius-sm); margin-bottom: 20px;"></div>
+
+          <!-- Danh sách các bản sao tại thư viện -->
+          <div style="margin-top: 25px;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary-dark); margin-bottom: 12px;">
+              <i class="fa-solid fa-boxes-stacked"></i> Danh mục bản sao vật lý tại thư viện
+            </h3>
+            
+            <div class="table-container">
+              <table class="academic-table" id="copiesTable">
+                <thead>
+                  <tr>
+                    <th style="width: 80px;">STT</th>
+                    <th>Mã bản sao</th>
+                    <th>Tình trạng khả dụng</th>
+                  </tr>
+                </thead>
+                <tbody id="copiesTableBody">
+                  <tr>
+                    <td colspan="3" style="text-align: center; color: var(--color-text-muted);">Đang tải thông tin bản sao...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Chân trang -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 Bản quyền thuộc về Trung tâm Thư viện. Ứng dụng Demo Web thư viện chuyển đổi số.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/trang/chi-tiet.js"></script>
+</body>
+</html>

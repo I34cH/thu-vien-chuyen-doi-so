@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard Thống kê & Trực quan hóa dữ liệu Thư viện Chuyển đổi số">
+  <title>Dashboard Thống Kê &amp; Trực Quan Hóa Số Hóa | Thư Viện Đại Học</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Thư viện biểu đồ: Chart.js 4.4.1 và wordcloud2.js 1.2.2 (AGENTS.md mục 2 & prompts/05-giao-viec-agy.md mục 8) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
+</head>
+<body>
+
+  <!-- Banner DỮ LIỆU MẪU cố định trên mọi trang (AGENTS.md mục 4.7) -->
+  <div class="demo-banner">
+    <i class="fa-solid fa-triangle-exclamation"></i> Dữ liệu log, lượt mượn, người dùng là DỮ LIỆU MẪU phục vụ demo
+  </div>
+
+  <!-- Top Bar -->
+  <aside class="top-bar" aria-label="Thông báo phục vụ">
+    <div class="container">
+      <div class="top-bar-info">
+        <span><i class="fa-regular fa-clock"></i> Phân hệ Thống kê Quản trị</span>
+        <span><i class="fa-solid fa-chart-line"></i> Dữ liệu hỗ trợ quyết định số hóa tư liệu</span>
+      </div>
+      <div class="top-bar-actions">
+        <a href="quan-ly.html"><i class="fa-solid fa-book-bookmark"></i> Quản lý mượn trả</a>
+        <a href="tra-cuu.html"><i class="fa-solid fa-magnifying-glass"></i> Tra cứu OPAC</a>
+        <a href="index.html"><i class="fa-solid fa-house"></i> Về trang chủ</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container">
+      <div class="brand-wrapper">
+        <div class="brand-logo-icon"><i class="fa-solid fa-landmark-dome"></i></div>
+        <div class="brand-title-group">
+          <h1>TRUNG TÂM THƯ VIỆN VÀ TRI THỨC SỐ</h1>
+          <p>Bảng Điều Khiển Trực Quan Hóa Dữ Liệu &amp; Ra Quyết Định Chuyển Đổi Số</p>
+        </div>
+      </div>
+      <div class="user-quick-profile">
+        <img src="https://ui-avatars.com/api/?name=Khach&background=9b1c1c&color=fff" 
+             alt="Ảnh thẻ" class="user-avatar">
+        <div class="user-details">
+          <span class="user-name">Đang tải...</span>
+          <span class="user-role">---</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <nav class="main-nav" aria-label="Điều hướng">
+    <div class="container">
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Trang chủ</a>
+        </li>
+        <li class="nav-item">
+          <a href="tra-cuu.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Tra cứu OPAC</a>
+        </li>
+        <li class="nav-item">
+          <a href="quan-ly.html" class="nav-link"><i class="fa-solid fa-book-bookmark"></i> Quản lý Mượn - Trả</a>
+        </li>
+        <li class="nav-item active">
+          <a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Dashboard Thống kê</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Nội dung Dashboard -->
+  <main class="container" style="padding-top: 30px; padding-bottom: 60px;">
+
+    <!-- Cảnh báo nếu không có quyền Thủ thư -->
+    <div id="dashForbiddenCard" style="display: none; background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 50px 20px; text-align: center;">
+      <i class="fa-solid fa-shield-halved fa-3x" style="color: var(--status-danger);"></i>
+      <h3 style="font-size: 1.3rem; margin-top: 16px; color: var(--color-primary-dark);">Yêu cầu quyền Thủ thư</h3>
+      <p style="color: var(--color-text-muted); margin-top: 6px; max-width: 500px; margin-left: auto; margin-right: auto;">
+        Dashboard phân tích và thống kê chuyển đổi số chỉ dành cho <strong>Thủ thư</strong> hoặc Quản trị viên thư viện.
+      </p>
+      <a href="tai-khoan.html" class="btn-opac-submit" style="margin-top: 18px; display: inline-flex;">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i> Đến trang Đăng nhập
+      </a>
+    </div>
+
+    <!-- Khung giao diện Dashboard Thủ thư -->
+    <div id="dashMainContent" style="display: none;">
+      
+      <!-- 1. 4 THẺ KPI CHÍNH (AGENTS.md mục 4.6 & Milestone M5) -->
+      <section style="margin-bottom: 30px;">
+        <div class="stats-grid">
+          
+          <div class="stat-item">
+            <div class="stat-icon-wrapper">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="kpiTongTim">---</h3>
+              <p>Tổng lượt tìm kiếm ghi nhận</p>
+            </div>
+          </div>
+
+          <div class="stat-item danger-border">
+            <div class="stat-icon-wrapper" style="color: var(--status-warning); background: #fef3c7;">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="kpiTiLe0Kq">---</h3>
+              <p>% Tìm kiếm không có kết quả</p>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon-wrapper" style="color: var(--status-borrowed); background: #eef2ff;">
+              <i class="fa-solid fa-book-reader"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="kpiLuotMuonMo">---</h3>
+              <p>Lượt mượn đang mở (chờ / đang mượn)</p>
+            </div>
+          </div>
+
+          <div class="stat-item accent-border">
+            <div class="stat-icon-wrapper" style="color: var(--color-accent-hover); background: #fdf9eb;">
+              <i class="fa-solid fa-file-pdf"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="kpiDaSoHoa">---</h3>
+              <p>Tư liệu đã được số hóa</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 2. KHỐI TRỰC QUAN HÓA TỪ KHÓA: WORD CLOUD & BAR CHART TOP 15 -->
+      <div class="dashboard-charts-grid">
+        
+        <!-- Khung 1: Word Cloud từ khóa -->
+        <div class="card-panel">
+          <div class="panel-header" style="flex-direction: column; align-items: flex-start; gap: 2px;">
+            <h3 class="panel-title"><i class="fa-solid fa-cloud"></i> Người dùng đang tìm kiếm chủ đề gì nhiều nhất?</h3>
+            <p class="chart-guide"><i class="fa-solid fa-circle-info"></i> Kích thước chữ tỷ lệ với căn bậc hai tần suất tra cứu. Cụm từ càng lớn thể hiện mức độ quan tâm càng cao.</p>
+          </div>
+          <div class="wordcloud-container" id="wordcloudWrapper">
+            <canvas id="wordcloudCanvas" class="wordcloud-canvas"></canvas>
+            <div id="wordcloudTooltip" class="wordcloud-tooltip" style="display: none;"></div>
+            <div id="wordcloudEmpty" style="display: none; color: var(--color-text-muted); padding: 20px; text-align: center;"></div>
+          </div>
+        </div>
+
+        <!-- Khung 2: Top 15 từ khóa tìm nhiều (Horizontal Bar Chart) -->
+        <div class="card-panel">
+          <div class="panel-header" style="flex-direction: column; align-items: flex-start; gap: 2px;">
+            <h3 class="panel-title"><i class="fa-solid fa-chart-bar"></i> 15 từ khóa nào có tần suất tra cứu cao nhất?</h3>
+            <p class="chart-guide"><i class="fa-solid fa-circle-info"></i> Biểu đồ cột ngang thể hiện số lượt tra cứu của 15 từ khóa phổ biến nhất trong hệ thống.</p>
+          </div>
+          <div class="chart-container-box">
+            <canvas id="topKeywordsChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3. KHỐI TRỰC QUAN HÓA XU HƯỚNG THEO THỜI GIAN (LINE CHART VỚI NÚT 7/30/90) -->
+      <div class="card-panel" style="margin-bottom: 30px;">
+        <div class="panel-header" style="flex-wrap: wrap; gap: 12px; align-items: flex-start;">
+          <div style="flex: 1; min-width: 280px;">
+            <h3 class="panel-title"><i class="fa-solid fa-chart-line"></i> Xu hướng tìm kiếm thay đổi như thế nào theo thời gian?</h3>
+            <p class="chart-guide"><i class="fa-solid fa-circle-info"></i> Đường biểu diễn số lượt tìm kiếm mỗi ngày (7, 30, 90 ngày gần nhất); điểm cuối là ngày hôm nay <strong>(đang cập nhật)</strong> được nối nét đứt.</p>
+          </div>
+          <div class="filter-pills" id="timelineFilterPills">
+            <button type="button" class="filter-pill" data-days="7">7 ngày</button>
+            <button type="button" class="filter-pill active" data-days="30">30 ngày</button>
+            <button type="button" class="filter-pill" data-days="90">90 ngày</button>
+          </div>
+        </div>
+        <div class="chart-container-box" style="height: 300px;">
+          <canvas id="timelineChart"></canvas>
+        </div>
+      </div>
+
+      <!-- 4. KHỐI BẢNG PHÂN TÍCH: TỪ KHÓA 0 KẾT QUẢ & ĐỀ XUẤT NÊN SỐ HÓA -->
+      <div class="dashboard-tables-grid">
+        
+        <!-- Bảng 1: Từ khóa tìm nhiều nhưng 0 kết quả (Gợi ý mua/bổ sung) -->
+        <div class="card-panel">
+          <div class="panel-header" style="flex-direction: column; align-items: flex-start; gap: 2px;">
+            <h3 class="panel-title" style="font-size: 1.05rem;"><i class="fa-solid fa-circle-question"></i> Những từ khóa nào được tìm nhiều nhưng chưa có tư liệu?</h3>
+            <p class="chart-guide"><i class="fa-solid fa-circle-info"></i> Danh sách các nhu cầu tra cứu trả về 0 kết quả, làm căn cứ đề xuất mua hoặc bổ sung tư liệu mới.</p>
+          </div>
+          <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table-academic" id="zeroResultsTable">
+              <thead>
+                <tr>
+                  <th style="width: 45px; text-align: center;">#</th>
+                  <th>Từ khóa tra cứu</th>
+                  <th style="width: 95px; text-align: center;">Số lần</th>
+                  <th style="width: 120px; text-align: center;">Lần cuối</th>
+                  <th style="width: 110px; text-align: center;">Đề xuất</th>
+                </tr>
+              </thead>
+              <tbody id="zeroResultsTableBody">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 25px; color: var(--color-text-muted);">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Bảng 2: Tư liệu đề xuất ưu tiên số hóa -->
+        <div class="card-panel">
+          <div class="panel-header" style="flex-direction: column; align-items: flex-start; gap: 2px;">
+            <h3 class="panel-title" style="font-size: 1.05rem;"><i class="fa-solid fa-wand-magic-sparkles"></i> Tư liệu nào cần được ưu tiên số hóa trước?</h3>
+            <p class="chart-guide"><i class="fa-solid fa-circle-info"></i> Xếp hạng dựa trên điểm nhu cầu (điểm = lượt chọn + 2 × lượt mượn) của các tư liệu chưa có bản mềm.</p>
+          </div>
+          <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table-academic" id="shouldDigitizeTable">
+              <thead>
+                <tr>
+                  <th style="width: 75px;">Ký hiệu</th>
+                  <th>Nhan đề tư liệu</th>
+                  <th style="width: 130px;">Tác giả &amp; Năm</th>
+                  <th style="width: 70px; text-align: center;" title="Lượt nhấp chọn từ kết quả tìm kiếm">Chọn</th>
+                  <th style="width: 70px; text-align: center;" title="Lượt độc giả đăng ký mượn">Mượn</th>
+                  <th style="width: 65px; text-align: center;" title="Điểm = Chọn + 2 * Mượn">Điểm</th>
+                  <th style="width: 95px; text-align: center;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="shouldDigitizeTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 25px; color: var(--color-text-muted);">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Đang tải danh sách đề xuất số hóa...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Chân trang -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 Bản quyền thuộc về Trung tâm Thư viện. Ứng dụng Demo Web thư viện chuyển đổi số.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/trang/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "thu-vien-chuyen-doi-so",
+  "version": "1.0.0",
+  "description": "Demo web thư viện chuyển đổi số: dữ liệu tìm kiếm & mượn giúp thủ thư quyết định số hóa",
+  "private": true,
+  "main": "server/app.py",
+  "scripts": {
+    "start": "python server/app.py",
+    "test": "python -m pytest tests/api -q",
+    "test:ui": "playwright test",
+    "demo:reset": "python tools/demo_reset.py",
+    "screenshots": "node tools/screenshots.js",
+    "report": "python tools/export_report.py"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1"
+  }
+}

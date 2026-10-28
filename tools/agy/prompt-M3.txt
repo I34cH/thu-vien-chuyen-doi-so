@@ -1,0 +1,8 @@
+Bạn là Argon (điều phối). Đọc prompts/05-giao-viec-agy.md (lưu ý kỹ thuật + giới hạn an toàn), AGENTS.md và prompts/01-teamwork.md mục M3. CHỈ làm M3; các milestone trước đã PASS, không làm lại (chỉ sửa khi cần cho M3 và phải giữ chúng pass).
+
+Việc riêng M3: dựng server/ (app.js export app, db.js, middleware/auth.js với yeuCauVaiTro, routes/) đúng danh sách route trong 01-teamwork.md mục M3 + route công khai GET /api/gioi-thieu (số đếm danh mục cho trang chủ). Tìm kiếm và gợi ý PHẢI dùng hàm SQL tim_tai_lieu(q)/f_chuan_hoa. Test server/tests/*.test.js (node --test + supertest) gồm tối thiểu 5 tình huống bắt buộc trong M3 và tự dọn dữ liệu trong after(). LỆNH KIỂM CHỨNG: npm test pass toàn bộ.
+
+Quy trình: dùng invoke_subagent Model "flash" với 3 subagent KHÁC NHAU: IMPLEMENT, TEST (chạy đúng LỆNH KIỂM CHỨNG của M3 trong 01-teamwork.md; Windows: DATABASE_URL trong .env, đặt PGCLIENTENCODING=UTF8), AUDIT (đối chiếu AGENTS.md: phân quyền yeuCauVaiTro, SQL tham số $1, cờ du_lieu_mau, màu đỏ, phạm vi; liệt kê lỗi cho implement sửa). Lặp implement -> test -> sửa tối đa 3 vòng; quá 3 vòng thì làm theo /boost (nguyên nhân gốc, 2 cách sửa, chọn 1). Ghi reports/milestones/M3.md: file đã tạo/sửa, output lệnh kiểm chứng dán NGUYÊN VĂN, kết quả audit, vấn đề còn lại.
+Sau khi gọi subagent, kết thúc lượt để chờ hệ thống đánh thức (tiến trình được giữ sống). Không hỏi lại người dùng.
+Khi M3 HOÀN TẤT (PASS, hoặc FAIL sau boost), câu trả lời cuối cùng phải kết thúc bằng một dòng riêng đúng là: MILESTONE_XONG
+Tuyệt đối không viết chuỗi đó ở chỗ nào khác trước khi thực sự xong.

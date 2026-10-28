@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cổng thông tin & Hệ thống Quản lý Thư viện Đại học - Web thư viện chuyển đổi số">
+  <title>Cổng Thông Tin & Quản Lý Thư Viện Đại Học</title>
+  
+  <!-- Phông chữ Google Roboto & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Banner DỮ LIỆU MẪU cố định trên mọi trang (AGENTS.md mục 4.7) -->
+  <div class="demo-banner">
+    <i class="fa-solid fa-triangle-exclamation"></i> Dữ liệu log, lượt mượn, người dùng là DỮ LIỆU MẪU phục vụ demo
+  </div>
+
+  <!-- 1. TOP BAR: THÔNG TIN PHỤC VỤ -->
+  <aside class="top-bar" aria-label="Thông báo phục vụ và hỗ trợ">
+    <div class="container">
+      <div class="top-bar-info">
+        <span><i class="fa-regular fa-clock"></i> Giờ phục vụ: 07:30 - 21:00 (Thứ 2 - Thứ 7)</span>
+        <span><i class="fa-solid fa-phone"></i> Đường dây nóng: (024) 3858 4615</span>
+        <span><i class="fa-solid fa-location-dot"></i> Tòa nhà Tri Thức (A4), Đại học Quốc Gia</span>
+      </div>
+      <div class="top-bar-actions">
+        <a href="#noiquy"><i class="fa-solid fa-book-open-reader"></i> Nội quy</a>
+        <a href="#huongdan"><i class="fa-solid fa-circle-question"></i> Hướng dẫn</a>
+        <a href="#lang"><i class="fa-solid fa-globe"></i> VN / EN</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 2. HEADER CHÍNH -->
+  <header class="main-header">
+    <div class="container">
+      <div class="brand-wrapper">
+        <div class="brand-logo-icon">
+          <i class="fa-solid fa-landmark-dome"></i>
+        </div>
+        <div class="brand-title-group">
+          <h1>TRUNG TÂM THƯ VIỆN VÀ TRI THỨC SỐ</h1>
+          <p>Học hiệu chuẩn quốc tế - Nghiên cứu khoa học & Chuyển giao tri thức</p>
+        </div>
+      </div>
+
+      <!-- Khối tài khoản độc giả cá nhân (tự động điền theo /api/toi) -->
+      <div class="user-quick-profile">
+        <img src="https://ui-avatars.com/api/?name=Khach&background=9b1c1c&color=fff" 
+             alt="Ảnh thẻ độc giả" class="user-avatar">
+        <div class="user-details">
+          <span class="user-name">Đang tải...</span>
+          <span class="user-role">---</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. THANH ĐIỀU HƯỚNG CHÍNH -->
+  <nav class="main-nav" aria-label="Thanh điều hướng chính của cổng thông tin">
+    <div class="container">
+      <ul class="nav-menu">
+        <li class="nav-item active">
+          <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Trang chủ</a>
+        </li>
+        <li class="nav-item">
+          <a href="tra-cuu.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Tra cứu OPAC</a>
+        </li>
+        <li class="nav-item">
+          <a href="tai-khoan.html" class="nav-link"><i class="fa-solid fa-arrow-right-to-bracket"></i> Đăng nhập</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 4. HERO BANNER: FORM TRA CỨU OPAC TRUNG TÂM VÀ AUTOCOMPLETE -->
+  <section class="hero-opac" aria-label="Khu vực tra cứu OPAC">
+    <div class="container">
+      <h2>KHÁM PHÁ KHO TÀI LIỆU HỌC THUẬT & TRI THỨC SỐ HÓA</h2>
+      <p>Tra cứu mục lục tài liệu khoa học, luận án tiến sĩ, luận văn thạc sĩ và học liệu số hóa</p>
+
+      <div class="opac-search-card">
+        <div class="opac-tabs">
+          <button class="opac-tab-btn active" type="button" data-loai=""><i class="fa-solid fa-book"></i> Tất cả tài liệu</button>
+          <button class="opac-tab-btn" type="button" data-loai="luan_an"><i class="fa-solid fa-graduation-cap"></i> Luận án</button>
+          <button class="opac-tab-btn" type="button" data-loai="luan_van"><i class="fa-solid fa-file-lines"></i> Luận văn</button>
+          <button class="opac-tab-btn" type="button" data-loai="sach"><i class="fa-solid fa-book-open"></i> Sách in</button>
+        </div>
+
+        <form action="tra-cuu.html" method="GET" class="opac-form-grid" id="heroSearchForm">
+          <div class="search-input-wrap">
+            <input type="search" name="q" id="heroSearchInput" class="opac-input" 
+                   placeholder="Nhập tên tài liệu, tác giả, ký hiệu hoặc từ khóa (ví dụ: luu tru, thong tin)..." 
+                   required autocomplete="off">
+            <div id="heroAutocompleteResults" class="autocomplete-results"></div>
+          </div>
+          <div>
+            <select name="loai" id="heroSelectLoai" class="opac-select" aria-label="Chọn bộ sưu tập">
+              <option value="">Toàn bộ loại hình</option>
+              <option value="luan_an">Luận án</option>
+              <option value="luan_van">Luận văn</option>
+              <option value="khoa_luan">Khóa luận</option>
+              <option value="bao_cao_kh">Báo cáo khoa học</option>
+              <option value="ky_yeu">Kỷ yếu</option>
+              <option value="sach">Sách</option>
+              <option value="sach_ha_noi">Sách Hà Nội</option>
+              <option value="tu_sach_tang">Tủ sách tặng</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-opac-submit">
+            <i class="fa-solid fa-magnifying-glass"></i> Tra cứu
+          </button>
+        </form>
+
+        <div class="opac-quick-tags">
+          <span><i class="fa-solid fa-fire" style="color: var(--color-orange);"></i> Từ khóa tìm nhiều:</span>
+          <a href="tra-cuu.html?q=luu+tru">Lưu trữ</a>
+          <a href="tra-cuu.html?q=van+thu">Văn thư</a>
+          <a href="tra-cuu.html?q=quan+ly">Quản lý</a>
+          <a href="tra-cuu.html?q=chuyen+doi+so">Chuyển đổi số</a>
+          <a href="tra-cuu.html?q=thong+tin">Thông tin</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. PHẦN THỐNG KÊ DANH MỤC THẬT (TỪ /api/gioi-thieu, KHÔNG DÙNG SỐ GIẢ) -->
+  <div class="container stats-section">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-icon-wrapper">
+          <i class="fa-solid fa-book-atlas"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="statTongTaiLieu">---</h3>
+          <p>Tổng đầu tư liệu danh mục</p>
+        </div>
+      </div>
+
+      <div class="stat-item accent-border">
+        <div class="stat-icon-wrapper" style="color: var(--color-accent-hover); background: #fdf9eb;">
+          <i class="fa-solid fa-file-pdf"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="statDaSoHoa">---</h3>
+          <p>Tư liệu đã có bản mềm số hóa</p>
+        </div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-icon-wrapper">
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="statCoBanCung">---</h3>
+          <p>Tư liệu có bản cứng phục vụ</p>
+        </div>
+      </div>
+
+      <div class="stat-item danger-border">
+        <div class="stat-icon-wrapper">
+          <i class="fa-solid fa-boxes-stacked"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="statSoLoaiHinh">8</h3>
+          <p>Bộ sưu tập & Loại hình tư liệu</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. NỘI DUNG CHÍNH -->
+  <main class="container">
+    <div class="content-layout-2col">
+
+      <!-- CỘT CHÍNH (BÊN TRÁI): TÀI LIỆU MỚI TIÊU BIỂU (DỮ LIỆU THẬT TỪ API) -->
+      <section>
+        <article class="card-panel">
+          <div class="panel-header">
+            <h2 class="panel-title"><i class="fa-solid fa-sparkles"></i> TƯ LIỆU TIÊU BIỂU TRONG KHO</h2>
+            <a href="tra-cuu.html" class="panel-link-more">Xem toàn bộ mục lục <i class="fa-solid fa-chevron-right"></i></a>
+          </div>
+
+          <!-- Lưới sách render động từ API -->
+          <div class="books-grid" id="homeBooksGrid">
+            <div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: var(--color-text-muted);">
+              <i class="fa-solid fa-spinner fa-spin"></i> Đang tải danh mục tư liệu...
+            </div>
+          </div>
+        </article>
+
+        <!-- Khối Giới thiệu Thư viện & Học liệu số -->
+        <article class="card-panel">
+          <div class="panel-header">
+            <h2 class="panel-title"><i class="fa-solid fa-network-wired"></i> HỆ THỐNG KHO TÀI LIỆU SỐ HÓA</h2>
+          </div>
+          <p style="margin-bottom: 16px; color: var(--color-text-muted);">
+            Hệ thống hỗ trợ tra cứu mục lục điện tử, tích hợp phục vụ tài liệu bản cứng và tài liệu bản mềm PDF số hóa trực tuyến dành cho bạn đọc trong và ngoài trường:
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;">
+            <div style="background: #f8fafc; padding: 16px; border: 1px solid var(--color-border); border-radius: 6px;">
+              <i class="fa-solid fa-graduation-cap" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 8px;"></i>
+              <h4 style="font-size: 0.95rem; font-weight: 600;">Luận án & Luận văn</h4>
+              <p style="font-size: 0.8rem; color: var(--color-text-muted);">Công trình nghiên cứu khoa học</p>
+            </div>
+            <div style="background: #f8fafc; padding: 16px; border: 1px solid var(--color-border); border-radius: 6px;">
+              <i class="fa-solid fa-book" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 8px;"></i>
+              <h4 style="font-size: 0.95rem; font-weight: 600;">Sách & Kỷ yếu</h4>
+              <p style="font-size: 0.8rem; color: var(--color-text-muted);">Tài liệu chuyên khảo đào tạo</p>
+            </div>
+            <div style="background: #f8fafc; padding: 16px; border: 1px solid var(--color-border); border-radius: 6px;">
+              <i class="fa-solid fa-file-pdf" style="font-size: 2rem; color: var(--color-primary); margin-bottom: 8px;"></i>
+              <h4 style="font-size: 0.95rem; font-weight: 600;">Bản mềm trực tuyến</h4>
+              <p style="font-size: 0.8rem; color: var(--color-text-muted);">Đọc toàn văn PDF tức thời</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- CỘT PHỤ (BÊN PHẢI): BẢN TIN THÔNG BÁO & NỘI QUY -->
+      <aside>
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3 class="panel-title"><i class="fa-solid fa-bullhorn"></i> THÔNG BÁO MỚI</h3>
+          </div>
+
+          <div class="notice-list">
+            <div class="notice-item">
+              <div class="notice-date-box">
+                <span class="day">15</span>
+                <span class="month">Th10</span>
+              </div>
+              <div class="notice-content">
+                <h4><a href="tra-cuu.html">Khai trương phân hệ Tra cứu OPAC trực tuyến</a></h4>
+                <p>Tra cứu nhanh mục lục tư liệu với khả năng tìm không dấu và gợi ý tự động.</p>
+              </div>
+            </div>
+
+            <div class="notice-item">
+              <div class="notice-date-box">
+                <span class="day">08</span>
+                <span class="month">Th10</span>
+              </div>
+              <div class="notice-content">
+                <h4><a href="tra-cuu.html">Đẩy mạnh số hóa tài liệu nghiên cứu và luận văn</a></h4>
+                <p>Ưu tiên số hóa các tài liệu có nhu cầu bạn đọc cao theo dữ liệu thống kê.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-panel" style="background-color: #f8fafc;">
+          <div class="panel-header">
+            <h3 class="panel-title"><i class="fa-solid fa-bolt"></i> DỊCH VỤ TRỰC TUYẾN</h3>
+          </div>
+          <ul style="display: flex; flex-direction: column; gap: 10px;">
+            <li>
+              <a href="tra-cuu.html" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #fff; border: 1px solid var(--color-border); border-radius: 6px;">
+                <i class="fa-solid fa-magnifying-glass" style="color: var(--color-primary); font-size: 1.2rem;"></i>
+                <div>
+                  <strong style="font-size: 0.9rem; display: block;">Tra cứu danh mục</strong>
+                  <small style="color: var(--color-text-muted);">Tìm kiếm sách, luận án, kỷ yếu</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="tai-khoan.html" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #fff; border: 1px solid var(--color-border); border-radius: 6px;">
+                <i class="fa-solid fa-clipboard-check" style="color: var(--color-primary); font-size: 1.2rem;"></i>
+                <div>
+                  <strong style="font-size: 0.9rem; display: block;">Đăng ký mượn tài liệu</strong>
+                  <small style="color: var(--color-text-muted);">Theo dõi lịch sử và trạng thái mượn</small>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- 7. CHÂN TRANG -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>TRUNG TÂM THƯ VIỆN ĐẠI HỌC</h3>
+          <p>
+            Cổng thông tin tích hợp quản lý và khai thác nguồn học liệu đại học số hóa hiện đại. Cung cấp không gian học thuật mở và kết nối nghiên cứu khoa học.
+          </p>
+          <p><i class="fa-solid fa-location-dot"></i> Tầng 1 - 4, Tòa nhà Tri Thức (A4), Đại học Quốc gia</p>
+          <p><i class="fa-solid fa-envelope"></i> thuvien@vnu.edu.vn | lienhe@thuvien.edu.vn</p>
+        </div>
+
+        <div class="footer-col">
+          <h3>DANH MỤC TRA CỨU</h3>
+          <ul>
+            <li><a href="tra-cuu.html"><i class="fa-solid fa-angle-right"></i> Tra cứu mục lục OPAC</a></li>
+            <li><a href="tra-cuu.html?loai=sach"><i class="fa-solid fa-angle-right"></i> Sách in & Giáo trình</a></li>
+            <li><a href="tra-cuu.html?loai=luan_an"><i class="fa-solid fa-angle-right"></i> Luận án tiến sĩ</a></li>
+            <li><a href="tra-cuu.html?loai=luan_van"><i class="fa-solid fa-angle-right"></i> Luận văn thạc sĩ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>DỊCH VỤ BẠN ĐỌC</h3>
+          <ul>
+            <li><a href="tai-khoan.html"><i class="fa-solid fa-angle-right"></i> Mượn trả & Hồ sơ</a></li>
+            <li><a href="#noiquy"><i class="fa-solid fa-angle-right"></i> Nội quy & Thẻ thư viện</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>LIÊN KẾT HỆ THỐNG</h3>
+          <ul>
+            <li><a href="https://nlv.gov.vn" target="_blank"><i class="fa-solid fa-link"></i> Thư viện Quốc gia (NLV)</a></li>
+            <li><a href="https://hus.vnu.edu.vn" target="_blank"><i class="fa-solid fa-link"></i> ĐH Khoa học Tự nhiên</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Bản quyền thuộc về Trung tâm Thư viện. Ứng dụng Demo Web thư viện chuyển đổi số.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/trang/index.js"></script>
+</body>
+</html>
