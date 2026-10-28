@@ -1,0 +1,6 @@
+# File nhị phân: không đổi ký tự xuống dòng
+*.pdf  binary
+*.png  binary
+*.xlsx binary
+# Script bash cần LF để chạy được trong Git Bash
+*.sh   text eol=lf
